@@ -1,142 +1,273 @@
-# TamilEcho @ DravidianLangTech 2026
+# 🧠 TamilEcho @ DravidianLangTech 2026  
+## Hybrid XLM-RoBERTa with Sarcasm-Aware Feature Fusion for Political Multiclass Sentiment Analysis in Tamil X (Twitter) Comments
 
-Hybrid XLM-RoBERTa with Sarcasm-Aware Feature Fusion for Political Multiclass Sentiment Analysis in Tamil X (Twitter) Comments
+![GitHub repo](https://img.shields.io/badge/GitHub-TamilEcho-blue?logo=github)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![Transformers](https://img.shields.io/badge/🤗_Transformers-HuggingFace-yellow?logo=huggingface)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep_Learning-red?logo=pytorch)
+![Scikit-learn](https://img.shields.io/badge/Scikit--Learn-Machine_Learning-orange?logo=scikit-learn)
+![DravidianLangTech](https://img.shields.io/badge/DravidianLangTech-2026-ff69b4)
 
-This repository contains the implementation of our system submitted to the DravidianLangTech 2026 shared task.
+🚀 **System submitted to the DravidianLangTech 2026 Shared Task**
 
-## Model
+---
 
-Our system combines:
+# 📌 Overview
 
-XLM-RoBERTa contextual embeddings  
-TF-IDF lexical features  
-Emoji-based sarcasm features  
+This repository contains the implementation of **TamilEcho**, our system for **Political Multiclass Sentiment Analysis in Tamil X (Twitter) comments**.
 
-These features are concatenated and passed through a fully connected classifier.
+Our approach combines:
 
-## Results
+- **XLM-RoBERTa contextual embeddings**
+- **TF-IDF lexical features**
+- **Emoji-based sarcasm features**
 
-Model Performance
+These features are **fused together in a hybrid neural architecture** to improve sentiment classification performance.
 
-XLM-RoBERTa Only → 0.331  
-XLM-RoBERTa + TF-IDF → 0.346  
-XLM-RoBERTa + TF-IDF + Emoji → 0.356  
+### 🔹 Key Highlights
 
-Final Macro-F1 Score: **0.3559**
+- Hybrid deep learning architecture  
+- Contextual embeddings using **XLM-RoBERTa**  
+- Lexical representation using **TF-IDF + SVD**  
+- Sarcasm-aware **emoji feature extraction**  
+- Class imbalance handled using **weighted loss**
 
-## Dataset
+---
 
-The dataset contains Tamil political tweets annotated into seven classes:
+# 🏛 Methodology
 
-Positive  
-Negative  
-Sarcastic  
-Opinionated  
-Substantiated  
-Neutral  
-None  
+## ✨ Preprocessing
 
-## Installation
-# TamilEcho @ DravidianLangTech 2026
+Several preprocessing steps are applied to enhance tweet representation.
 
-Hybrid XLM-RoBERTa with Sarcasm-Aware Feature Fusion for Political Multiclass Sentiment Analysis in Tamil X (Twitter) Comments
+### 🔹 Hashtag Expansion
 
-This repository contains the implementation of our system submitted to the DravidianLangTech 2026 shared task.
+Political hashtags are expanded using a **knowledge base dictionary**.
 
-## Model
+Example:
 
-Our system combines:
+```
+#DMK → Dravida Munnetra Kazhagam ruling party Tamil Nadu
+#BJP → Bharatiya Janata Party Indian national political party
+#NTK → Naam Tamilar Katchi Tamil nationalist political party
+```
 
-XLM-RoBERTa contextual embeddings  
-TF-IDF lexical features  
-Emoji-based sarcasm features  
+### 🔹 Emoji Feature Extraction
 
-These features are concatenated and passed through a fully connected classifier.
+Emojis are used to capture sarcasm and emotional tone.
 
-## Results
+We extract two features:
 
-Model Performance
+- Total emoji count  
+- Sarcastic emoji count
 
-XLM-RoBERTa Only → 0.331  
-XLM-RoBERTa + TF-IDF → 0.346  
-XLM-RoBERTa + TF-IDF + Emoji → 0.356  
+Example sarcasm emojis:
 
-Final Macro-F1 Score: **0.3559**
+```
+😂 🤣 😏 🙃 🤡 🤦 🤷 🙄 💀 🔥
+```
 
-## Dataset
+---
 
-The dataset contains Tamil political tweets annotated into seven classes:
+# 🔥 Feature Extraction
 
-Positive  
-Negative  
-Sarcastic  
-Opinionated  
-Substantiated  
-Neutral  
-None  
+## 1️⃣ TF-IDF Features
 
-## Installation
-# TamilEcho @ DravidianLangTech 2026
+TF-IDF captures important words and phrases from tweets.
 
-Hybrid XLM-RoBERTa with Sarcasm-Aware Feature Fusion for Political Multiclass Sentiment Analysis in Tamil X (Twitter) Comments
+Parameters used:
 
-This repository contains the implementation of our system submitted to the DravidianLangTech 2026 shared task.
+```
+max_features = 8000
+ngram_range = (1,2)
+min_df = 2
+```
 
-## Model
+## 2️⃣ Dimensionality Reduction
 
-Our system combines:
+TF-IDF features are reduced using **Truncated SVD**.
 
-XLM-RoBERTa contextual embeddings  
-TF-IDF lexical features  
-Emoji-based sarcasm features  
+```
+TF-IDF → 256 dimensional vector
+```
 
-These features are concatenated and passed through a fully connected classifier.
+---
 
-## Results
+# ⚙️ Model Architecture
 
-Model Performance
+The hybrid architecture combines multiple feature representations.
 
-XLM-RoBERTa Only → 0.331  
-XLM-RoBERTa + TF-IDF → 0.346  
-XLM-RoBERTa + TF-IDF + Emoji → 0.356  
+### Input Features
 
-Final Macro-F1 Score: **0.3559**
+1. **XLM-RoBERTa CLS embedding** (768)  
+2. **Mean pooled token embeddings** (768)  
+3. **TF-IDF + SVD features** (256)  
+4. **Emoji sarcasm features** (2)
 
-## Dataset
+These features are concatenated and passed to a classifier.
 
-The dataset contains Tamil political tweets annotated into seven classes:
+### Architecture Flow
 
-Positive  
-Negative  
-Sarcastic  
-Opinionated  
-Substantiated  
-Neutral  
-None  
+```
+Tweet Text
+   │
+XLM-RoBERTa Encoder
+   │
+ ┌───────────────┐
+ CLS Embedding   Mean Pooling
+ └───────────────┘
+        │
+ TF-IDF + SVD Features
+        │
+ Emoji Sarcasm Features
+        │
+ Feature Concatenation
+        │
+ Fully Connected Layer
+        │
+ Softmax Classification
+```
 
-## Installation
-pip install -r requirements.txt
+---
 
+# 🧪 Training Strategy
 
-## Run Model
+### Optimizer
 
-Train model:
+```
+AdamW
+Learning Rate = 2e-5
+Weight Decay = 0.01
+```
 
+### Loss Function
+
+```
+Weighted Cross Entropy Loss
+Label Smoothing = 0.1
+```
+
+### Additional Techniques
+
+- Progressive **layer unfreezing**
+- **Gradient clipping**
+- **Class weighting** for imbalanced data
+
+---
+
+# 📊 Results
+
+## Model Variants
+
+| Model | Macro-F1 |
+|------|------|
+| XLM-RoBERTa Only | 0.331 |
+| XLM-RoBERTa + TF-IDF | 0.346 |
+| **XLM-RoBERTa + TF-IDF + Emoji** | **0.356** |
+
+### Development Set Performance
+
+Macro-F1 Score: **0.397**
+
+| Class | F1 Score |
+|------|------|
+| Negative | 0.25 |
+| Neutral | 0.22 |
+| None of the above | 0.95 |
+| Opinionated | 0.45 |
+| Positive | 0.36 |
+| Sarcastic | 0.43 |
+| Substantiated | 0.12 |
+
+---
+
+# 📂 Dataset
+
+The dataset contains **Tamil political tweets** annotated into **seven sentiment classes**:
+
+1. Positive  
+2. Negative  
+3. Sarcastic  
+4. Opinionated  
+5. Substantiated  
+6. Neutral  
+7. None of the above  
+
+Dataset files:
+
+```
+PS_train.csv
+PS_dev.csv
+PS_test_without_labels.csv
+```
+
+---
+
+# 📦 Installation
+
+Install dependencies:
+
+```bash
+pip install -q transformers sentencepiece torch scikit-learn emoji accelerate pandas numpy
+```
+
+---
+
+# ▶️ Running the Model
+
+### Train Model
+
+```bash
 python train.py
+```
 
+### Generate Predictions
 
-Generate predictions:
-
+```bash
 python predict.py
+```
 
+This generates:
 
-## Authors
+```
+submission.csv
+```
 
-Kanimozhi Selvi C S  
-Inigashree N S  
-Moneissh A G  
-Kavinraj J  
+---
+
+# 🛠 Dependencies
+
+Main libraries used:
+
+- Python 3.8+
+- PyTorch
+- HuggingFace Transformers
+- Scikit-learn
+- Pandas
+- NumPy
+- Emoji
+
+---
+
+# 👩‍💻 Authors
+
+**Kanimozhi Selvi C S**  
+**Inigashree N S**  
+**Moneissh A G**  
+**Kavinraj J**
 
 Department of Computer Science and Engineering  
-Kongu Engineering College
+Kongu Engineering College  
+Tamil Nadu, India
 
+---
+
+# 📄 Paper
+
+**TamilEcho: Hybrid XLM-RoBERTa with Sarcasm-Aware Feature Fusion for Political Multiclass Sentiment Analysis in Tamil X (Twitter) Comments**
+
+Submitted to:
+
+**DravidianLangTech 2026 Workshop**
+
+---
