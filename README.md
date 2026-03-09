@@ -213,25 +213,9 @@ pip install -q transformers sentencepiece torch scikit-learn emoji accelerate pa
 
 ---
 
-# ▶️ Running the Model
+## ▶️ Running the Model (Google Colab)
 
-### Train Model
-
-```bash
-python train.py
-```
-
-### Generate Predictions
-
-```bash
-python predict.py
-```
-
-This generates:
-
-```
-submission.csv
-```
+Open the notebook **Hybrid_XLMR_TFIDF_Emoji.ipynb** in **Google Colab** and install the required libraries by running `!pip install -q transformers sentencepiece torch scikit-learn emoji accelerate pandas numpy`. Since the dataset is stored in Google Drive, mount your drive using `from google.colab import drive` and `drive.mount('/content/drive')`. After mounting the drive, run all the cells in the notebook sequentially to load the dataset, preprocess the tweets, train the **Hybrid XLM-RoBERTa + TF-IDF + Emoji feature fusion model**, evaluate the model on the development dataset, and finally generate predictions for the test dataset. The final predictions will be saved as **submission.csv**.
 
 ---
 
