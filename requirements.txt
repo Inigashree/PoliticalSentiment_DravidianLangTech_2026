@@ -1,0 +1,11 @@
+torch
+transformers
+sentencepiece
+scikit-learn
+pandas
+numpy
+emoji
+accelerate
+tqdm
+matplotlib
+seaborn
